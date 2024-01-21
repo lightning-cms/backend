@@ -1,6 +1,14 @@
 import {Hono} from "hono";
 import fs from "fs";
 import colors from 'colors'
+import mongoose from "mongoose"
+
+// await promise
+mongoose.connect(process.env.MONGO_URI!).then(() => {
+  console.log("Mongo connected")
+}).catch((e) => {
+  console.error(e)
+})
 
 const app = new Hono();
 
@@ -35,9 +43,11 @@ routes.map(async (route) => {
 
 const api = app.route("/v1");
 
+// GET /v1
 export default {
   port: 3001,
   fetch: app.fetch,
 };
 
+console.log(`API Hosting at http://72.183.172.208:3001`)
 export {api};
