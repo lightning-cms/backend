@@ -3,7 +3,6 @@ import fs from "fs";
 import colors from 'colors'
 import mongoose from "mongoose"
 
-// await promise
 mongoose.connect(process.env.MONGO_URI!).then(() => {
   console.log("Mongo connected")
 }).catch((e) => {
@@ -33,13 +32,12 @@ const loadFiles = (dir: string) => {
   return files;
 };
 
-const routes = loadFiles(`${import.meta.dir}/routes`);
+const routes = loadFiles(`${import.meta.dir}/routes`)
 
 routes.map(async (route) => {
   await import(route.path);
   console.log(`${colors.blue('Loaded route:')} ${colors.white(route.path.split('/').slice(7).join("/").replace(/.ts/g, ""))}`)
 });
-
 
 const api = app.route("/v1");
 
