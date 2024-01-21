@@ -2,6 +2,7 @@ import {Hono} from "hono";
 import fs from "fs";
 import colors from 'colors'
 import mongoose from "mongoose"
+import {clerkMiddleware} from "@hono/clerk-auth";
 
 mongoose.connect(process.env.MONGO_URI!).then(() => {
   console.log("Mongo connected")
@@ -9,7 +10,7 @@ mongoose.connect(process.env.MONGO_URI!).then(() => {
   console.error(e)
 })
 
-const app = new Hono();
+const app = new Hono()
 
 const loadFiles = (dir: string) => {
   const files: {
@@ -38,6 +39,8 @@ routes.map(async (route) => {
   await import(route.path);
   console.log(`${colors.blue('Loaded route:')} ${colors.white(route.path.split('/').slice(7).join("/").replace(/.ts/g, ""))}`)
 });
+
+app.use('*', clerkMiddleware())
 
 const api = app.route("/v1");
 
