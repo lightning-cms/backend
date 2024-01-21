@@ -6,7 +6,7 @@ app.get("/", (c) => {
     return c.json({
         msg: "hello world"
     })
-});
+})
 
 export default {
     port: 3001,
